@@ -1,6 +1,5 @@
 package util;
 
-
 import java.awt.Graphics2D;
 import java.awt.Dimension;
 import java.awt.Color;
@@ -19,9 +18,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import model.trader.IStock;
-
-import util.DateUtil;
-
 
 /**
  * This is a Drawline class for graph generation.

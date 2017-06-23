@@ -26,7 +26,6 @@ public class InteractiveView implements TextView, GraphicView {
     this.out = out;
   }
 
-
   @Override
   public void manual() throws IOException {
     this.out.append("Date Format : YYYYMMDD\n" + "[-create basketName createdate]\n"
@@ -38,9 +37,12 @@ public class InteractiveView implements TextView, GraphicView {
             + "[-graph -plotMA50-200 basketname/stockname startDate endDate]\n"
             + "[-graph -add basketname/stockname startDate endDate]\n"
             + "[-graph -addMA days basketname/stockname startDate endDate]\n"
-            + "[-graph -remove basketname/stockname]\n" + "[q Exit]\n");
+            + "[-graph -remove basketname/stockname]\n"
+            + "[-simulate -run principle investingAmount startDate endDate "
+            + "DCA/AR MONTH/QUARTER {a list of stock proportion pairs}]\n"
+            + "[-simulate -query date]\n"
+            + "[q Exit]\n");
   }
-
 
   @Override
   public void printBasket(Map<String, Basket> map, String basketname) throws IOException {

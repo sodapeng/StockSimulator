@@ -1,13 +1,16 @@
 package controller;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
 import model.trader.IStockModel;
+import model.trader.Simulator;
 import model.trader.TrendCalculator;
+import util.DateUtil;
 import util.StockDataRetriever;
 import view.trader.InteractiveView;
 
@@ -24,6 +27,8 @@ public class InteractiveController implements Controller {
   private StockDataRetriever dataRetriever;
   private TrendCalculator trendCalculator;
   private IStockModel iStockModel;
+
+  private Simulator simulator;
 
   /**
    * Construct an Interactive controller object.
@@ -101,6 +106,12 @@ public class InteractiveController implements Controller {
       }
     } else if (args[0].equals("-graph")) {
       processGraphArgs(args);
+    } else if (args[0].equals("-simulate")) {
+      try {
+        processSimulationArgs(args);
+      } catch (Exception e) {
+        view.printError(e.getMessage());
+      }
     } else {
       view.printError("invalid input\n");
     }
@@ -130,6 +141,44 @@ public class InteractiveController implements Controller {
       plotaddmovave(args);
     } else {
       view.printError("invalid input\n");
+    }
+  }
+
+  /**
+   * Used to support simulation related commands.
+   * @param args          user input
+   * @throws Exception
+   */
+  private void processSimulationArgs(String[] args) throws Exception {
+    int len = args.length;
+    // [-simulate -run principle investingAmount startDate endDate DOLLARCOSTAVERAGE/OPTION2/OPTION3 MONTH/QUARTER {a list of stock proportion pairs}]
+    if (args[1].equals("-run")) {
+      double principle = Double.valueOf(args[2]);
+      double investingAmount = Double.valueOf(args[3]);
+
+      LocalDate startDate = DateUtil.getLocalDate(Integer.valueOf(args[4]));
+      LocalDate endDate = DateUtil.getLocalDate(Integer.valueOf(args[5]));
+
+      String strategy = args[6];
+      String cadence = args[7];
+
+      int i = 8;
+      Map<String, Double> proportionMap = new HashMap<String, Double>();
+      while (i < len) {
+        proportionMap.put(args[i++], Double.valueOf(args[i++]));
+      }
+
+      simulator = new Simulator(principle, investingAmount, startDate, endDate, strategy, cadence, proportionMap);
+      view.printMessage("Simulation Initialized\n");
+    }
+    // -simulate -query date
+    else if (args[1].equals("-query")) {
+      LocalDate queryDate = DateUtil.getLocalDate(Integer.valueOf(args[2]));
+      double profit = simulator.getProfit(queryDate);
+      view.printMessage("Profit on " + queryDate.toString() + " is " + profit + "\n");
+    }
+    else {
+      throw new IllegalArgumentException("Invalid input\n");
     }
   }
 
