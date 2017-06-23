@@ -150,6 +150,33 @@ public class InteractiveController implements Controller {
    * @throws Exception
    */
   private void processSimulationArgs(String[] args) throws Exception {
+//    if (args[1].equals("-run")) {
+//      if (! iStockModel.containsBasket(args[2])) {
+//        throw new IllegalArgumentException("Basket has not bee created yet\n");
+//      }
+//      double principle = Double.valueOf(args[3]);
+//      double investingAmount = Double.valueOf(args[4]);
+//      int endDate = Integer.parseInt(args[5]);
+//      String strategy = args[6];
+//      String cadence = args[7];
+//      iStockModel.startSimulate(args[2], principle, investingAmount, endDate, strategy, cadence);
+//      view.printMessage("Simulation Initialized\n");
+//
+//    }
+//    else if (args[1].equals("-query")) {
+//      if (! iStockModel.containsBasket(args[2])) {
+//        throw new IllegalArgumentException("Basket has not been created yet\n");
+//      }
+//      int queryDate = Integer.parseInt(args[3]);
+//      double profit = iStockModel.getProfit(args[2], queryDate);
+//      //Simulator simquery = iStockModel.getSimulator(args[2]);
+//      view.printMessage("" + profit);
+//    }
+//    else {
+//      throw new IllegalArgumentException("invalid input");
+//    }
+
+
     int len = args.length;
     // [-simulate -run principle investingAmount startDate endDate DOLLARCOSTAVERAGE/OPTION2/OPTION3 MONTH/QUARTER {a list of stock proportion pairs}]
     if (args[1].equals("-run")) {
@@ -168,13 +195,13 @@ public class InteractiveController implements Controller {
         proportionMap.put(args[i++], Double.valueOf(args[i++]));
       }
 
-      simulator = new Simulator(principle, investingAmount, startDate, endDate, strategy, cadence, proportionMap);
+      simulator = iStockModel.startSimulate(principle, investingAmount, startDate, endDate, strategy, cadence, proportionMap);
       view.printMessage("Simulation Initialized\n");
     }
     // -simulate -query date
     else if (args[1].equals("-query")) {
       LocalDate queryDate = DateUtil.getLocalDate(Integer.valueOf(args[2]));
-      double profit = simulator.getProfit(queryDate);
+      double profit = iStockModel.getProfit(simulator, queryDate);
       view.printMessage("Profit on " + queryDate.toString() + " is " + profit + "\n");
     }
     else {

@@ -1,5 +1,6 @@
 package model.trader;
 
+import java.time.LocalDate;
 import java.util.Map;
 
 import util.StockDataRetriever;
@@ -69,4 +70,29 @@ public interface Model {
    */
   Map<String, Map<Integer, Double>> iStockPlot(String iStockName, int fromDate, int toDate)
           throws Exception;
+
+  /**
+   * Start simulation with given principle, invest money, date range, strategy, cadence and
+   * stocks with corresponding share.
+   * @param principle principle for investment
+   * @param investAmount amount of money invest periodically
+   * @param startDate start date of investment
+   * @param endDate end date of investment
+   * @param strategy strategy that are going to be used
+   * @param cadence time interval for investment
+   * @param proportionMap stocks with corresponding proportion
+   * @return A simulator for investment simulation
+   * @throws Exception
+   */
+  Simulator startSimulate(double principle, double investAmount, LocalDate startDate,
+                          LocalDate endDate, String strategy, String cadence,
+                          Map<String, Double> proportionMap) throws Exception;
+
+  /**
+   * Get the profit of given simulation and query date.
+   * @param simulator simulation
+   * @param queryDate query date
+   * @return profit earned on query date
+   */
+  double getProfit(Simulator simulator, LocalDate queryDate);
 }

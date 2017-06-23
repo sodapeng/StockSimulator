@@ -43,7 +43,11 @@ public class InteractiveControllerTest {
             + "[-graph -plotMA50-200 basketname/stockname startDate endDate]\n"
             + "[-graph -add basketname/stockname startDate endDate]\n"
             + "[-graph -addMA days basketname/stockname startDate endDate]\n"
-            + "[-graph -remove basketname/stockname]\n" + "[q Exit]\n";
+            + "[-graph -remove basketname/stockname]\n"
+            + "[-simulate -run principle investingAmount startDate endDate "
+            + "DCA/AR MONTH/QUARTER {a list of stock proportion pairs}]\n"
+            + "[-simulate -query date]\n"
+            + "[q Exit]\n";
     exit = "Exit!";
 
   }
@@ -417,6 +421,31 @@ public class InteractiveControllerTest {
   @Test
   public void addMATest2() throws Exception {
     in = new StringReader("-graph -addMA 50 AAPL 20170601 20170602\nq\n");
+    InteractiveController controller = new InteractiveController(in, view, iStockModel,
+            dataRetriever, trendCalculator);
+    controller.startProgram();
+    assertEquals(manual + "create a graph first\n" + manual + exit, view.toString());
+  }
+
+  /**
+   * Test simulation print out correctly
+   */
+  @Test
+  public void simulationTest() throws Exception {
+    in = new StringReader("-simulate -run 5000 1000 20160601 20170601 DCA " +
+            "MONTH AMZN 0.5 GOOGL 0.5\nq\n");
+    InteractiveController controller = new InteractiveController(in, view, iStockModel,
+            dataRetriever, trendCalculator);
+    controller.startProgram();
+    assertEquals(manual + "create a graph first\n" + manual + exit, view.toString());
+  }
+
+
+
+  @Test
+  public void profitTest() throws Exception {
+    in = new StringReader("-simulate -run 5000 1000 20160601 20170601 DCA " +
+            "MONTH AMZN 0.5 GOOGL 0.5\n-simulate -query 20170531\nq\n");
     InteractiveController controller = new InteractiveController(in, view, iStockModel,
             dataRetriever, trendCalculator);
     controller.startProgram();

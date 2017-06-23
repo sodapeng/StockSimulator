@@ -1,8 +1,11 @@
 package model.trader;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import util.DateUtil;
 import util.StockDataRetriever;
 
 /**
@@ -125,5 +128,20 @@ public class IStockModel implements Model {
    */
   public boolean containsBasket(String basketName) {
     return setOfBasket.containsKey(basketName);
+  }
+
+  @Override
+  public Simulator startSimulate(double principle, double investAmount, LocalDate startDate,
+                                 LocalDate endDate, String strategy, String cadence,
+                                 Map<String, Double> proportionMap) throws Exception {
+    Simulator simulator = new Simulator(principle, investAmount, startDate, endDate,
+            strategy, cadence, proportionMap, dataRetriever);
+    return simulator;
+  }
+
+  @Override
+  public double getProfit(Simulator simulator, LocalDate queryDate) {
+    double profit = simulator.getProfit(queryDate);
+    return profit;
   }
 }

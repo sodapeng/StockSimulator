@@ -258,4 +258,12 @@ public class Basket implements IStock {
     int fromint = DateUtil.convertInt(fromlocal);
     return fromint < basektCreateTime;
   }
+
+  public int getTotalShare() {
+    int totalShare = 0;
+    for (int share : basketMap.values()) {
+      totalShare += share;
+    }
+    return totalShare;
+  }
 }
