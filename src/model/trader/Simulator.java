@@ -1,13 +1,10 @@
 package model.trader;
 
-import util.Calculate;
 import util.DateUtil;
 import util.PriceRecord;
 import util.StockDataRetriever;
-import util.WebStockDataRetriever;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
@@ -208,6 +205,8 @@ public class Simulator implements ISimulator {
    * @throws Exception when cannot retrieve data
    */
   private Map<String, Map<Integer, Double>> fetchHistoricalStockPrices(Map<String, Double> proportionMap, LocalDate startDate, LocalDate endDate) throws Exception {
+    // fetch two more week data because if we invest on weekends we will use prices in next monday
+    endDate = endDate.plusWeeks(2);
     Map<String, Map<Integer, Double>> stockPricesRecord = new HashMap<String, Map<Integer, Double>>();
     for (String stock : proportionMap.keySet()) {
       Map<Integer, PriceRecord> dateToPricRecordeMap = dataRetriever.getHistoricalPrices(stock,
@@ -231,9 +230,16 @@ public class Simulator implements ISimulator {
     double value = 0;
     Basket basket = basketSnapshots.floorEntry(DateUtil.convertInt(date)).getValue();
     for (Map.Entry<String, Integer> stock : basket.getStockMap().entrySet()) {
-      // if the date looking for is not a business day, look for previous last business day
+      int plusDays = 0;
+      // assume that stock market never paused for more than two weeks,
+      // or if we mistakenly look into the future
+      // if the date looking for is not a business day, look for next monday
       while (stockPricesRecord.get(stock.getKey()).get(DateUtil.convertInt(date)) == null) {
-        date = date.minusDays(1);
+        if (plusDays > 14) {
+          throw new RuntimeException("Cannot find price");
+        }
+        plusDays++;
+        date = date.plusDays(1);
       }
       value += stockPricesRecord.get(stock.getKey()).get(DateUtil.convertInt(date)) * stock.getValue();
     }

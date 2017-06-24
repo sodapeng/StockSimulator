@@ -43,11 +43,12 @@
  * start and end date of investiment. Stragedy that is going to be used: DCA: Dollar-cost averaging, AR: Automatic 
  * rebalancing. Time period interval for investment: MONTH: invest once a month, QUARTHER: invest once in four month.
  * A list of stock proportion pairs start with stock symbol, and followed with corresponding proportion. Proportion in
- * the list need to be added up to 1. If start date is not business day, last Friday will be used as start date. Then simulate query can be called. (See note 1,2 below)
+ * the list need to be added up to 1. If start date is not business day, use the next monday.
+ * Then simulate query can be called. (See note 1,2 below)
  *
  * [-simulate -query date] get the profit of previous simulation, on the certain given query date. Query date need to 
  * in range of previous investment date range. Query is available after simulation runs. If query date is not business
- * day, last Friday will be used as query date.
+ * day, use the next monday.
  *
  * [q Exit]: Exit the program.
  *

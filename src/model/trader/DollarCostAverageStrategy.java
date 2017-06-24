@@ -46,8 +46,16 @@ public class DollarCostAverageStrategy implements InvestingStrategy {
     Basket newBasket = new Basket("SimulationBasket", this.dataRetriever, DateUtil.convertInt(date));
     for (Map.Entry<String, Integer> stock : preBasket.getStockMap().entrySet()) {
       // if the date is not business day, invest on the last business day
+      int plusDays = 0;
       while (stockPricesRecord.get(stock.getKey()).get(DateUtil.convertInt(date)) == null) {
-        date = date.minusDays(1);
+        // assume that stock market never paused for more than two weeks,
+        // or if we mistakenly look into the future
+        // if the date looking for is not a business day, look for next monda
+        if (plusDays > 14) {
+          throw new RuntimeException("Cannot find price entry");
+        }
+        plusDays++;
+        date = date.plusDays(1);
       }
       int share = (int) Math.floor(investingAmount * proportion.get(stock.getKey()) / stockPricesRecord.get(stock.getKey()).get(DateUtil.convertInt(date)));
       newBasket.addStock(stock.getKey(), stock.getValue() + share);
