@@ -437,11 +437,23 @@ public class InteractiveControllerTest {
     InteractiveController controller = new InteractiveController(in, view, iStockModel,
             dataRetriever, trendCalculator);
     controller.startProgram();
-    assertEquals(manual + "create a graph first\n" + manual + exit, view.toString());
+    assertEquals(manual + "Simulation Initialized\n" + manual + exit, view.toString());
   }
 
+  @Test
+  public void profitTest2() throws Exception {
+    in = new StringReader("-simulate -run 5000 1000 20170502 20170602 DCA " +
+            "MONTH AMZN 0.5 AAPL 0.5\n-simulate -query 20170601\nq\n");
+    InteractiveController controller = new InteractiveController(in, view, iStockModel,
+            dataRetriever, trendCalculator);
+    controller.startProgram();
+    assertEquals(manual + "Simulation Initialized\n" + manual
+            + "Profit on 2017-06-01 is 188.7400000000007\n" + manual + exit, view.toString());
+  }
 
-
+  /**
+   * Test get profit print out correctly.
+   */
   @Test
   public void profitTest() throws Exception {
     in = new StringReader("-simulate -run 5000 1000 20160601 20170601 DCA " +
@@ -449,7 +461,22 @@ public class InteractiveControllerTest {
     InteractiveController controller = new InteractiveController(in, view, iStockModel,
             dataRetriever, trendCalculator);
     controller.startProgram();
-    assertEquals(manual + "create a graph first\n" + manual + exit, view.toString());
+    assertEquals(manual + "Simulation Initialized\n" + manual
+            + "Profit on 2017-05-31 is 1541.4299999999994\n" + manual + exit, view.toString());
+  }
+
+  /**
+   * Test get profit print out correctly when there is an invalid input.
+   */
+  @Test
+  public void profitTest1() throws Exception {
+    in = new StringReader("-simulate -run 5000 1000 20160601 20170601 DCA " +
+            "MONTH AMZN 0.5 GOOGL 0.5\n-simulate -query 20160531\nq\n");
+    InteractiveController controller = new InteractiveController(in, view, iStockModel,
+            dataRetriever, trendCalculator);
+    controller.startProgram();
+    assertEquals(manual + "Simulation Initialized\n" + manual
+            + "Date must be start and end range\n" + manual + exit, view.toString());
   }
 
 }

@@ -71,4 +71,10 @@ public class DollarCostAverageStrategyTest {
     assertEquals(new Integer(2), invested.get("AMZN"));
 
   }
+
+  @Test
+  public void getInvestCostTest() throws Exception {
+    strategy.invest(prebasket, investAmount, startlocal);
+    assertEquals(4254.04, strategy.getInvestingCost(), 0.0001);
+  }
 }

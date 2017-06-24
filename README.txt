@@ -43,11 +43,18 @@
  * start and end date of investiment. Stragedy that is going to use: DCA: Dollar-cost averaging, AR: Automatic 
  * rebalancing. Time period interval for investment: MONTH: invest once a month, QUARTHER: invest once in three month.
  * A list of stock proportion pairs start with stock symbol, and followed with corresponding proportion. Proportion in
- * the list need to be added to 1. Simulation on previous created basket is not supported due to not enough informtion
- * for simulation.
+ * the list need to be added up to 1.(See note below)
  *
  * [-simulate -query date] get the profit of previous simulation, on the certain given query date. Query date need to 
- * in range of previous investment date range.
+ * in range of previous investment date range. 
  *
  * [q Exit]: Exit the program.
+ *
+ * 
+ * Note: Simulation on previous created basket is not supported due to not enough informtion
+ * Note: Profit is based on actual initial principle, and money that is invested periodically.
+ * Share of each stocks in an basket is calculated by proportion * principle / stock price. Then
+ * the share will be casted in to integer as final share of this stock in this basket. Then the
+ * actual initial principle will be calculated by each stocks' prices * its share.)
+
  */

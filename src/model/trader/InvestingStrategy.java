@@ -18,4 +18,11 @@ public interface InvestingStrategy {
    * @return a new basket after investment
    */
   Basket invest(final Basket basket, double investingAmount, LocalDate date) throws Exception;
+
+  /**
+   * Return the actual investment cost at each investment
+   *
+   * @return the actual investment cost
+   */
+  double getInvestingCost();
 }

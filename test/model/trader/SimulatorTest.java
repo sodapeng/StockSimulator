@@ -9,6 +9,7 @@ import java.util.Map;
 
 import util.DateUtil;
 import util.StockDataRetriever;
+import util.WebStockDataRetriever;
 
 import static org.junit.Assert.*;
 
@@ -29,12 +30,13 @@ public class SimulatorTest {
     proportionMap.put("AAPL", 0.5);
     proportionMap.put("AMZN", 0.5);
     startDate = DateUtil.getLocalDate(20170502);
-    startDate = DateUtil.getLocalDate(20170602);
+    endDate = DateUtil.getLocalDate(20170602);
     principle = 5000;
     investAmount = 1000;
     strategy = "DCA";
     cadence = "MONTH";
-    Simulator simulator = new Simulator(principle, investAmount, startDate, endDate, strategy,
+    dataRetriever = new WebStockDataRetriever();
+    simulator = new Simulator(principle, investAmount, startDate, endDate, strategy,
             cadence, proportionMap, dataRetriever);
   }
 
@@ -43,17 +45,17 @@ public class SimulatorTest {
    */
   @Test (expected = IllegalArgumentException.class)
   public void testConstructor1() throws Exception{
-    proportionMap = new HashMap<>();
-    proportionMap.put("AAPL", 0.5);
-    proportionMap.put("AMZN", 0.3);
+    Map<String, Double> proportionMap1 = new HashMap<>();
+    proportionMap1.put("AAPL", 0.5);
+    proportionMap1.put("AMZN", 0.1);
     startDate = DateUtil.getLocalDate(20170502);
-    startDate = DateUtil.getLocalDate(20170602);
+    endDate = DateUtil.getLocalDate(20170602);
     principle = 5000;
     investAmount = 1000;
     strategy = "DCA";
     cadence = "MONTH";
-    Simulator simulator = new Simulator(principle, investAmount, startDate, endDate, strategy,
-            cadence, proportionMap, dataRetriever);
+    Simulator simulator1 = new Simulator(principle, investAmount, startDate, endDate, strategy,
+            cadence, proportionMap1, dataRetriever);
   }
 
   /**
@@ -94,8 +96,8 @@ public class SimulatorTest {
 
   @Test
   public void getProfit() throws Exception {
-    assertEquals(0.0, simulator.getProfit(DateUtil.getLocalDate(20170601)), 0.0001);
-    assertEquals(0.0, simulator.getProfit(DateUtil.getLocalDate(20170526)), 0.0001);
+    assertEquals(188.74, simulator.getProfit(DateUtil.getLocalDate(20170601)), 0.0001);
+    assertEquals(195.28, simulator.getProfit(DateUtil.getLocalDate(20170526)), 0.0001);
   }
 
   /**

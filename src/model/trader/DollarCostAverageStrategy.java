@@ -9,7 +9,6 @@ import java.util.Map;
 /**
  * This is a class represent dollar cost average strategy.
  */
-
 public class DollarCostAverageStrategy implements InvestingStrategy {
 
   private Map<String, Double> proportion;
@@ -18,6 +17,8 @@ public class DollarCostAverageStrategy implements InvestingStrategy {
   private Map<String, Map<Integer, Double>> stockPricesRecord;
 
   private StockDataRetriever dataRetriever;
+
+  private double investingCost;
 
   /**
    * Initialize DollarCostAverageStrategy
@@ -32,7 +33,7 @@ public class DollarCostAverageStrategy implements InvestingStrategy {
   }
 
   /**
-   * Invest certain amout of money at specific date to the basket
+   * Invest certain amount of money at specific date to the basket
    *
    * @param preBasket       the basket in simulation
    * @param investingAmount a mount of money invested each time
@@ -40,6 +41,7 @@ public class DollarCostAverageStrategy implements InvestingStrategy {
    * @return a new basket after investment
    */
   public Basket invest(final Basket preBasket, double investingAmount, LocalDate date) throws Exception {
+    investingCost = 0;
     // must use new instance each time to keep a history snapshot of basket
     Basket newBasket = new Basket("SimulationBasket", this.dataRetriever, DateUtil.convertInt(date));
     for (Map.Entry<String, Integer> stock : preBasket.getStockMap().entrySet()) {
@@ -49,8 +51,17 @@ public class DollarCostAverageStrategy implements InvestingStrategy {
       }
       int share = (int) Math.floor(investingAmount * proportion.get(stock.getKey()) / stockPricesRecord.get(stock.getKey()).get(DateUtil.convertInt(date)));
       newBasket.addStock(stock.getKey(), stock.getValue() + share);
+      investingCost += share * stockPricesRecord.get(stock.getKey()).get(DateUtil.convertInt(date));
     }
     return newBasket;
+  }
+
+  /**
+   * Return the actual investment cost at each investment
+   * @return the actual investment cost
+   */
+  public double getInvestingCost() {
+    return investingCost;
   }
 
 }

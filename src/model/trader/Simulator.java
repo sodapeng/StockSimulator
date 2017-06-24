@@ -63,6 +63,7 @@ public class Simulator implements ISimulator {
     this.strategy = setStrategy(strategy, this.proportionMap, this.stockPricesRecord, this.dataRetriever);
 
     Basket initialBasket = this.strategy.invest(initBasket(this.proportionMap), this.principle, this.startDate);
+    this.principle = this.strategy.getInvestingCost();
     basketSnapshots = new TreeMap<Integer, Basket>();
     basketSnapshots.put(DateUtil.convertInt(this.startDate), initialBasket);
 
@@ -73,6 +74,10 @@ public class Simulator implements ISimulator {
 
   /**
    * Get profit at a given time.
+   * Profit is based on actual initial principle, and money that is invested periodically.
+   * Share of each stocks in an basket is calculated by proportion * principle / stock price. Then
+   * the share will be casted in to integer as final share of this stock in this basket. Then the
+   * actual initial principle will be calculated by each stocks' prices * its share.
    *
    * @param date the date at which profit is computed.
    * @return the profit
@@ -101,6 +106,7 @@ public class Simulator implements ISimulator {
     while (current.plusMonths(leap).isBefore(endDate)) {
       current = current.plusMonths(leap);
       Basket newBasket = strategy.invest(curBasket, investAmount, current);
+      this.principle += strategy.getInvestingCost();
       basketSnapshots.put(DateUtil.convertInt(current), newBasket);
       curBasket = newBasket;
     }
@@ -172,7 +178,7 @@ public class Simulator implements ISimulator {
     for (String stock : proportionMap.keySet()) {
       sum += proportionMap.get(stock);
     }
-    if (sum - 1 < 0.00001) {
+    if (Math.abs(sum - 1) < 0.00001) {
       return proportionMap;
     } else {
       throw new IllegalArgumentException("Stock proportion must add up to 1\n");
