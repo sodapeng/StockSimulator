@@ -34,8 +34,8 @@ public class DrawLine extends JFrame {
     private List<IStock> istocks;
     private final int PAD = 40;
     private final Color[] colorarray = {Color.BLACK, Color.BLUE, Color.CYAN,
-            Color.GRAY, Color.GREEN, Color.LIGHT_GRAY, Color.MAGENTA, Color.ORANGE, Color.PINK,
-            Color.RED, Color.YELLOW};
+        Color.GRAY, Color.GREEN, Color.LIGHT_GRAY, Color.MAGENTA, Color.ORANGE, Color.PINK,
+        Color.RED, Color.YELLOW};
 
     /**
      * Construct a draw panel object.

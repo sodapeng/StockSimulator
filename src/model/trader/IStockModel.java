@@ -1,11 +1,9 @@
 package model.trader;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import util.DateUtil;
 import util.StockDataRetriever;
 
 /**

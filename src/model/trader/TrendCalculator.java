@@ -13,7 +13,7 @@ public interface TrendCalculator {
    * the date range.
    *
    * @param historicalClosing a map with date as key and closing price as value for a stock or a
-   *     basket of stocks.
+   *                         basket of stocks.
    * @return the trend calculate by calculating the difference in price between the start and the
    *     end of the date range
    */

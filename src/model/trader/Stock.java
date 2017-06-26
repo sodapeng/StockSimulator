@@ -34,7 +34,8 @@ public class Stock implements IStock {
 
   @Override
   public Map<Integer, Double> getHistoricalClosing(int fromDate, int fromMon, int fromYear,
-                                                   int toDate, int toMon, int toYear) throws Exception {
+                                                   int toDate, int toMon, int toYear)
+          throws Exception {
     Map<Integer, PriceRecord> map = dataRetriever.getHistoricalPrices(stockSymbol,
             fromDate, fromMon, fromYear, toDate, toMon, toYear);
 

@@ -80,7 +80,8 @@ public class Basket implements IStock {
   @Override
   //throw exception if from date is before basket create date
   public Map<Integer, Double> getHistoricalClosing(int fromDate, int fromMon, int fromYear,
-                                                   int toDate, int toMon, int toYear) throws Exception {
+                                                   int toDate, int toMon, int toYear)
+          throws Exception {
     if (beforeCreate(fromDate, fromMon, fromYear)) {
       throw new IllegalArgumentException("invalid input");
     }

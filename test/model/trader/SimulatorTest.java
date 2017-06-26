@@ -43,8 +43,8 @@ public class SimulatorTest {
   /**
    * Test when stock proportion added up not equal to 1.
    */
-  @Test (expected = IllegalArgumentException.class)
-  public void testConstructor1() throws Exception{
+  @Test(expected = IllegalArgumentException.class)
+  public void testConstructor1() throws Exception {
     Map<String, Double> proportionMap1 = new HashMap<>();
     proportionMap1.put("AAPL", 0.5);
     proportionMap1.put("AMZN", 0.1);
@@ -61,8 +61,8 @@ public class SimulatorTest {
   /**
    * Test when strategy is not valid.
    */
-  @Test (expected = IllegalArgumentException.class)
-  public void testConstructor2() throws Exception{
+  @Test(expected = IllegalArgumentException.class)
+  public void testConstructor2() throws Exception {
     proportionMap = new HashMap<>();
     proportionMap.put("AAPL", 0.5);
     proportionMap.put("AMZN", 0.3);
@@ -79,8 +79,8 @@ public class SimulatorTest {
   /**
    * Test when cadence is not valid.
    */
-  @Test (expected = IllegalArgumentException.class)
-  public void testConstructor3() throws Exception{
+  @Test(expected = IllegalArgumentException.class)
+  public void testConstructor3() throws Exception {
     proportionMap = new HashMap<>();
     proportionMap.put("AAPL", 0.5);
     proportionMap.put("AMZN", 0.3);
@@ -96,19 +96,21 @@ public class SimulatorTest {
 
   @Test
   public void getProfit() throws Exception {
-    assertEquals(188.74, simulator.getProfit(DateUtil.getLocalDate(20170601)), 0.0001);
-    assertEquals(195.28, simulator.getProfit(DateUtil.getLocalDate(20170526)), 0.0001);
+    assertEquals(188.74,
+            simulator.getProfit(DateUtil.getLocalDate(20170601)), 0.0001);
+    assertEquals(195.28,
+            simulator.getProfit(DateUtil.getLocalDate(20170526)), 0.0001);
   }
 
   /**
    * Test get profit throw exception when date is not in investment range.
    */
-  @Test (expected = IllegalArgumentException.class)
+  @Test(expected = IllegalArgumentException.class)
   public void getProfitTest() {
     simulator.getProfit(DateUtil.getLocalDate(20170603));
   }
 
-  @Test (expected = IllegalArgumentException.class)
+  @Test(expected = IllegalArgumentException.class)
   public void getProfitTes1t() {
     simulator.getProfit(DateUtil.getLocalDate(20170403));
   }

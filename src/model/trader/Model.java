@@ -82,7 +82,7 @@ public interface Model {
    * @param cadence time interval for investment
    * @param proportionMap stocks with corresponding proportion
    * @return A simulator for investment simulation
-   * @throws Exception
+   * @throws Exception when cannot retrieve data
    */
   Simulator startSimulate(double principle, double investAmount, LocalDate startDate,
                           LocalDate endDate, String strategy, String cadence,

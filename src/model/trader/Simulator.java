@@ -24,13 +24,11 @@ public class Simulator implements ISimulator {
   private double investAmount;
   private Map<String, Map<Integer, Double>> stockPricesRecord;
   private String cadence;
-
-  // for now use WebStockDataRetriever as default, can be expanded by passing this through constructor
   private StockDataRetriever dataRetriever;
 
   /**
    * Support command "[-simulate -run principle investingAmount startDate endDate
-   * DOLLARCOSTAVERAGE/OPTION2/OPTION3 MONTH/QUARTER {a list of stock proportion pairs}]"
+   * DOLLARCOSTAVERAGE/OPTION2/OPTION3 MONTH/QUARTER {a list of stock proportion pairs}]".
    *
    * @param principle     principle
    * @param investAmount  the amount of money used in each investment
@@ -55,11 +53,14 @@ public class Simulator implements ISimulator {
 
     this.dataRetriever = dataRetriever;
 
-    this.stockPricesRecord = fetchHistoricalStockPrices(this.proportionMap, this.startDate, this.endDate);
+    this.stockPricesRecord
+            = fetchHistoricalStockPrices(this.proportionMap, this.startDate, this.endDate);
 
-    this.strategy = setStrategy(strategy, this.proportionMap, this.stockPricesRecord, this.dataRetriever);
+    this.strategy
+            = setStrategy(strategy, this.stockPricesRecord, this.dataRetriever);
 
-    Basket initialBasket = this.strategy.invest(initBasket(this.proportionMap), this.principle, this.startDate);
+    Basket initialBasket
+            = this.strategy.invest(initBasket(this.proportionMap), this.principle, this.startDate);
     this.principle = this.strategy.getInvestingCost();
     basketSnapshots = new TreeMap<Integer, Basket>();
     basketSnapshots.put(DateUtil.convertInt(this.startDate), initialBasket);
@@ -89,6 +90,7 @@ public class Simulator implements ISimulator {
 
   /**
    * Start the simulation.
+   *
    * @throws Exception when cannot retrieve data
    */
   private void simulate() throws Exception {
@@ -111,6 +113,7 @@ public class Simulator implements ISimulator {
 
   /**
    * Check if start date is earlier than 19000101.
+   *
    * @param startDate start date
    * @return start date
    */
@@ -123,6 +126,7 @@ public class Simulator implements ISimulator {
 
   /**
    * Check if end date is later than current date.
+   *
    * @param endDate end date
    * @return end date
    */
@@ -135,17 +139,18 @@ public class Simulator implements ISimulator {
 
   /**
    * Create a Strategy object based on user choice of strategy.
-   * @param strategy strategy will be used
-   * @param proportionMap stocks proportion map
+   *
+   * @param strategy          strategy will be used
    * @param stockPricesRecord stock price
-   * @param dataRetriever stock data retriever
+   * @param dataRetriever     stock data retriever
    * @return Strategy object
    */
-  private InvestingStrategy setStrategy(String strategy, Map<String, Double> proportionMap, Map<String, Map<Integer, Double>> stockPricesRecord, StockDataRetriever dataRetriever) {
+  private InvestingStrategy setStrategy(
+          String strategy, Map<String, Map<Integer, Double>> stockPricesRecord,
+          StockDataRetriever dataRetriever) {
     if (strategy.equals("DCA")) {
       return new DollarCostAverageStrategy(proportionMap, stockPricesRecord, dataRetriever);
     } else if (strategy.equals("AR")) {
-
       //Different kinds of strategy are supported, for now use DCA (implemented) as default.
       return new DollarCostAverageStrategy(proportionMap, stockPricesRecord, dataRetriever);
     } else {
@@ -155,6 +160,7 @@ public class Simulator implements ISimulator {
 
   /**
    * Set time interval for periodically investment.
+   *
    * @param cadence user cadence input
    * @return cadence
    */
@@ -167,6 +173,7 @@ public class Simulator implements ISimulator {
 
   /**
    * Check if user set stock proportion correctly.
+   *
    * @param proportionMap stock proportion map
    * @return stock proportion map
    */
@@ -184,12 +191,14 @@ public class Simulator implements ISimulator {
 
   /**
    * Create a new basket for later investment.
+   *
    * @param proportionMap stock proportion map
    * @return empty basket with 0 shares for all stocks
    * @throws Exception when cannot retrieve data.
    */
   private Basket initBasket(Map<String, Double> proportionMap) throws Exception {
-    Basket basket = new Basket("SimulationBasket", this.dataRetriever, 19000101);
+    Basket basket =
+            new Basket("SimulationBasket", this.dataRetriever, 19000101);
     for (String stock : proportionMap.keySet()) {
       basket.addStock(stock, 0);
     }
@@ -198,16 +207,20 @@ public class Simulator implements ISimulator {
 
   /**
    * Get historical pricing data of each stocks in basket within certain date range.
+   *
    * @param proportionMap stock proportion map
-   * @param startDate start date
-   * @param endDate end date
+   * @param startDate     start date
+   * @param endDate       end date
    * @return historical pricing data map with stock symbol as key, data as value
    * @throws Exception when cannot retrieve data
    */
-  private Map<String, Map<Integer, Double>> fetchHistoricalStockPrices(Map<String, Double> proportionMap, LocalDate startDate, LocalDate endDate) throws Exception {
+  private Map<String, Map<Integer, Double>> fetchHistoricalStockPrices(
+          Map<String, Double> proportionMap, LocalDate startDate, LocalDate endDate)
+          throws Exception {
     // fetch two more week data because if we invest on weekends we will use prices in next monday
     endDate = endDate.plusWeeks(2);
-    Map<String, Map<Integer, Double>> stockPricesRecord = new HashMap<String, Map<Integer, Double>>();
+    Map<String, Map<Integer, Double>> stockPricesRecord =
+            new HashMap<String, Map<Integer, Double>>();
     for (String stock : proportionMap.keySet()) {
       Map<Integer, PriceRecord> dateToPricRecordeMap = dataRetriever.getHistoricalPrices(stock,
               startDate.getDayOfMonth(), startDate.getMonthValue(), startDate.getYear(),
@@ -223,6 +236,7 @@ public class Simulator implements ISimulator {
 
   /**
    * Get basket value on a given date.
+   *
    * @param date date
    * @return value of basket
    */
@@ -241,7 +255,8 @@ public class Simulator implements ISimulator {
         plusDays++;
         date = date.plusDays(1);
       }
-      value += stockPricesRecord.get(stock.getKey()).get(DateUtil.convertInt(date)) * stock.getValue();
+      value += stockPricesRecord.get(stock.getKey()).get(DateUtil.convertInt(date))
+              * stock.getValue();
     }
     return value;
   }

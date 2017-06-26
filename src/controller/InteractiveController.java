@@ -147,7 +147,7 @@ public class InteractiveController implements Controller {
   /**
    * Used to support simulation related commands.
    * @param args          user input
-   * @throws Exception
+   * @throws Exception when cannot retrieve data
    */
   private void processSimulationArgs(String[] args) throws Exception {
     int len = args.length;
@@ -232,7 +232,8 @@ public class InteractiveController implements Controller {
       int start = Integer.parseInt(args[args.length - 2]);
       for (int i = 2; i < args.length - 2; i++) {
         Map<String, Map<Integer, Double>> closingdata = iStockModel.iStockPlot(args[i], start, end);
-        Map<String, Map<Integer, Double>> data = iStockModel.iStockPlotMov(args[i], start, end, days);
+        Map<String, Map<Integer, Double>> data =
+                iStockModel.iStockPlotMov(args[i], start, end, days);
         dataTotal.putAll(closingdata);
         dataTotal.putAll(data);
       }
@@ -296,7 +297,8 @@ public class InteractiveController implements Controller {
       int days = Integer.parseInt(args[2]);
       for (int i = 3; i < args.length - 2; i++) {
         Map<String, Map<Integer, Double>> closingdata = iStockModel.iStockPlot(args[i], start, end);
-        Map<String, Map<Integer, Double>> data = iStockModel.iStockPlotMov(args[i], start, end, days);
+        Map<String, Map<Integer, Double>> data =
+                iStockModel.iStockPlotMov(args[i], start, end, days);
         dataTotal.putAll(data);
         dataTotal.putAll(closingdata);
       }
