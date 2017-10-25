@@ -1,3 +1,8 @@
+## Stock Simlulator Project
+*	Used Object Oriented Design to model stock, index, with prices change and transactions over time. Designed an application with MVC principle that separates data access layer, business logics and display models.
+*	Created an interactive graph that plots closing prices, 50 and 200 days moving average prices of stocks. Users can use the application to add and remove different stocks and indices in the graph.
+*	Implemented simulation of different stock investment strategies. Run the simulation based on given principle and money invested periodically, implemented Dollar-cost averaging to calculate the profit in the end.
+
 /**
  * Usage: (Examples see below)
  * Date Format : YYYYMMDD
@@ -58,41 +63,4 @@
  * Share of each stocks in an basket is calculated by proportion * principle / stock price. Then
  * the share will be casted in to integer as final share of this stock in this basket. Then the
  * actual initial principle will be calculated by each stocks' prices * its share.)
-
- /**
-   * Examples:
-   * [-create basketName createdate]: -create basket1 20160601
-   * 
-   * [-add stockName share basketName]: -add AAPL 10 basket1
-   * 
-   * [-print basketName]: -print basket1
-   * 
-   * [-trend stockName startDate endDate]: -trend basket1 20160601 20170601
-   * 
-   * [-graph -blankgraph]: -graph -blankgraph
-   * 
-   * [-graph -plotclosing basketname/stockname startDate endDate]: -graph -plotclosing basket1 AMZN
-   * 20160601 20170601
-   * 
-   * [-graph -plotMA50 basketname/stockname startDate endDate]: -graph -plotMA50 basket1 GOOGL AMZN
-   * 20160601 20170601
-   * 
-   * [-graph -plotMA200 basketname/stockname startDate endDate]: -graph -plotMA200 basket1 GOOGL AMZN
-   * 20160601 20170601
-   * 
-   * [-graph -plotMA50-200 basketname/stockname startDate endDate]: -graph -plotMA50-200 basket1 GOOGL AMZN
-   * 20160601 20170601
-   * 
-   * [-graph -add basketname/stockname startDate endDate]: -graph -add AMZN 20160601 20170601
-   * 
-   * [-graph -addMA days basketname/stockname startDate endDate]: -graph -addMA 50 MSFT 20160601 20170601
-   * 
-   * [-graph -remove basketname/stockname]: -graph -remove basket1
-   * 
-   * [-simulate -run principle investingAmount startDate endDate DCA/AR MONTH/QUARTER {a list of stock 
-   * proportion pairs}]
-   * -simulate -run 5000 1000 20160601 20170601 DCA MONTH AMZN 0.5 GOOGL 0.5
-   * 
-   * [-simulate -query date]: -simulate -query 20170531
-   */
  */
